@@ -1,7 +1,6 @@
 class TasksController < ApplicationController
-  before_action :set_task_and_user_match, only: [:show, :edit, :update, :destroy]
   before_action :require_user_logged_in
-
+  before_action :set_task_and_user_match, only: [:show, :edit, :update, :destroy]
   
   def index
     @tasks = current_user.tasks
