@@ -1,7 +1,7 @@
 class TasksController < ApplicationController
-  before_action :set_task, only: [:show, :edit, :update, :destroy]
+  before_action :set_task_and_user_match, only: [:show, :edit, :update, :destroy]
   before_action :require_user_logged_in
-  before_action :require_user_match, only: [:show, :edit, :update, :destroy]
+
   
   def index
     @tasks = current_user.tasks
@@ -48,18 +48,15 @@ class TasksController < ApplicationController
   
   private
   
-  def set_task
+  def set_task_and_user_match
     @task = Task.find(params[:id])
+    unless @task.user == current_user
+      redirect_to login_url
+    end
   end
   
   def task_params
     params.require(:task).permit(:content, :status)
   end
   
-  def require_user_match
-    unless @task.user == current_user
-      redirect_to login_url
-    end
-  end
-    
 end
